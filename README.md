@@ -1,75 +1,152 @@
-# 🎧 Miglioratore Automatico Audio (Noise Reduction, EQ, Compressore, De-Esser…)
-Script Python per elaborare automaticamente file audio applicando una catena di miglioramento professionale della voce.
-Progettato per essere semplice da usare, personalizzabile e con una procedura guidata da terminale, proprio come un piccolo "studio" automatico.
+# 🎧 AudioOptimizer Pro: Enterprise DSP Pipeline
 
-## ✨ Funzionalità principali
-- 🧭 Interfaccia guidata da terminale, passo dopo passo
-- 🎛️ Catena audio completa:
-1. Noise Reduction
-2. EQ (high-pass, pulizia boxiness, boost intelligibilità)
-3. De-Esser
-4. Compressore
-5. Saturazione leggera
-6. Limiter finale
-- 🎚️ Parametri regolabili dall’utente
-- 📊 Barra di progresso con tqdm
-- 🔄 Elaborazione multipla in batch
-- 💾 Output automatico in una cartella dedicata
+![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Pydub](https://img.shields.io/badge/Audio-Pydub-red)
 
-## 🎵 Formati supportati
+## 🚀 Il Tuo Studio di Mastering in Riga di Comando
 
-Lo script elabora i formati più comuni:
-. ```.wav```
-. ```.mp3```
-. ```.flac```
-. ```.ogg```
-L’output viene salvato con suffisso ```-processed``` e stesso formato originale.
+**AudioOptimizer Pro** è un framework enterprise progettato per l'ottimizzazione massiva di asset sonori. Sviluppato per podcasting, game design e dataset per il Machine Learning, questo tool automatizza la complessa catena di segnale (DSP) necessaria per trasformare registrazioni grezze in prodotti audio professionali e cristallini.
+
+Dimentica l'editing manuale traccia per traccia. Grazie a un'architettura asincrona e algoritmi avanzati basati su `SciPy` e `noisereduce`, la pipeline applica una catena di mastering completa: dalla riduzione del rumore ambientale alla compressione dinamica, fino al limiting finale. Tutto questo con una CLI moderna che garantisce il controllo totale su ogni fase del processo.
+
+---
+
+## 📌 Indice
+* [✨ Caratteristiche Principali](#-caratteristiche-principali)
+* [🏗️ Architettura DSP](#-architettura-dsp)
+* [📂 Struttura della Repository](#-struttura-della-repository)
+* [⚙️ Installazione](#-installazione)
+* [🛠️ Guida all'Uso](#-guida-alluso)
+* [🖼️ Media](#-media)
+* [🗺️ Roadmap](#-roadmap)
+* [❓ FAQ](#-faq)
+* [🤝 Contribuire](#-contribuire)
+
+---
+
+## ✨ Caratteristiche Principali
+* **🧹 Noise Reduction Algoritmica**: Rimozione intelligente dei disturbi di fondo preservando le armoniche vocali.
+* **🎚️ Equalizzazione Strutturale**: Filtro passa-alto (HPF) per eliminare rimbombi e attenuazione della banda "boxiness" (200-400Hz).
+* **🗣️ Presenza & De-Esser**: Boost intelligente delle frequenze medie per l'intelligibilità e attenuazione mirata delle sibilanti (5-8kHz).
+* **📉 Compressione Dinamica**: Normalizzazione dei picchi e riduzione del range dinamico per un suono compatto e professionale.
+* **⚡ Saturazione & Limiter**: Saturazione armonica leggera via `tanh` e limiter di sicurezza per evitare il clipping digitale.
+
+---
+
+## 🏗️ Architettura DSP
+
+```mermaid
+graph LR
+    A[Audio Input] --> B[Noise Reduction]
+    B --> C[Structural EQ]
+    C --> D[De-Esser]
+    D --> E[Dynamic Compression]
+    E --> F[Saturation]
+    F --> G[Peak Limiter]
+    G --> H[Export .WAV]
+```
+
+---
+
+## 📂 Struttura della Repository
+```text
+.
+├── main.py              # Orchestrazione della pipeline e CLI
+├── custom_logger.py     # Gestione log aziendali e diagnostica
+├── requirements.txt     # Dipendenze (Pydub, Noisereduce, Scipy, Rich)
+└── README.md            # Documentazione tecnica
+```
+
+---
 
 ## ⚙️ Installazione
-Assicurati di avere Python 3.8+ installato, quindi installa le dipendenze richieste:
+
+1. **Clona la repository**:
+   ```bash
+   git clone https://github.com/mattemn97/audio-optimizer-pro.git
+   cd audio-optimizer-pro
+   ```
+
+2. **Requisito di Sistema**: Assicurati di avere **FFmpeg** installato sul tuo sistema (necessario per `pydub`).
+   ```bash
+   # macOS
+   brew install ffmpeg
+   # Ubuntu/Debian
+   sudo apt install ffmpeg
+   ```
+
+3. **Installa le dipendenze Python**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+---
+
+## 🛠️ Guida all'Uso
+
+Avvia l'interfaccia interattiva e segui i prompt a video:
+
 ```bash
-pip install -r requirements.txt 
+python main.py
 ```
-## 🧭 Utilizzo (modalità guidata)
-Avvia lo script e segui le istruzioni nel terminale.
-La procedura ti chiede:
-- 📂 Percorso della cartella sorgente con i file audio
-- 💾 Cartella di destinazione
-- 🎚️ Quali effetti abilitare o disabilitare (Noise Reduction, EQ, De-Esser, ecc.)
-- 🔊 Impostazioni personalizzate (opzionali)
-- ▶️ Conferma finale ed elaborazione batch
 
-## 🔧 Catena audio implementata
-Lo script riproduce una catena di miglioramento vocale completa:
+### Configurazione Moduli:
+Durante l'esecuzione, potrai attivare o disattivare i seguenti moduli tramite prompt:
+* **Noise Reduction**: Ideale per registrazioni casalinghe.
+* **Equalizzazione**: Pulisce le risonanze della stanza.
+* **Limiter**: Fondamentale se intendi pubblicare il file su piattaforme streaming.
 
-### 1️⃣ Noise Reduction
-Riduce rumori di fondo stabili (ventole, fruscii, ronzio).
+> [!IMPORTANT]
+> Il sistema esporta automaticamente in formato **WAV** per preservare la massima fedeltà audio dopo il processamento.
 
-### 2️⃣ Equalizzazione
-- High-pass a 80–100 Hz
-- Riduzione “scatola” 250–400 Hz
-- Boost intelligibilità 3–5 kHz
+---
 
-### 3️⃣ De-Esser
-Attenua le sibilanti nella zona 4–8 kHz.
+## 🖼️ Media
 
-### 4️⃣ Compressione
-Uniforma la dinamica e rende la voce più stabile.
+| Stadio | Visualizzazione Spettrale |
+| :--- | :--- |
+| **Grezzo** | ![Prima](https://via.placeholder.com/400x150?text=Spettrogramma+Grezzo+Rumoroso) |
+| **Ottimizzato** | ![Dopo](https://via.placeholder.com/400x150?text=Spettrogramma+Pulito+e+Normalizzato) |
 
-### 5️⃣ Saturazione
-Aggiunge presenza e un tocco “analogico”.
+---
 
-### 6️⃣ Limiter
-Blocca i picchi e porta il livello finale a –1 dBFS.
+## 🗺️ Roadmap
+- [ ] **Multiprocessing**: Implementazione di `concurrent.futures` per processare più file simultaneamente.
+- [ ] **Preset Specialistici**: Aggiunta di modalità predefinite (es. "Vocal", "Music", "Podcast").
+- [ ] **Supporto VST**: Interfacciamento con plugin esterni tramite `pedalboard`.
+- [ ] **Analisi LUFS**: Implementazione della misurazione del volume percepito (Loudness).
 
-## 📦 Output
-Alla fine troverai nella cartella scelta:
-- nomefile-processed.wav / .mp3 / ecc.
-- Stesso formato dell’audio originale
-- Volume, intelligibilità e pulizia nettamente migliorati
+---
 
-🧠 Suggerimenti
-- Ottimo per podcast, voiceover, reel, contenuti social, presentazioni e conferenze.
-- Per audio molto sporchi, attiva Noise Reduction + Noise Gate insieme.
-- Se la voce suona troppo “spinta”, riduci compressione e saturazione.
-- Consigliato registrare a 48 kHz per risultati più puliti.
+## ❓ FAQ
+
+**Q: Quali formati sono supportati in ingresso?** **A:** Supportiamo `.wav`, `.mp3`, `.flac`, `.ogg` e `.m4a`. Grazie a FFmpeg, la compatibilità è pressoché universale.
+
+**Q: Il limiter distorce il suono?** **A:** No, il limiter è configurato per intervenire solo sui picchi che superano la soglia di sicurezza, garantendo un output a -0.5 dBFS senza clipping udibile.
+
+---
+
+## 🤝 Contribuire
+Siamo entusiasti di ricevere pull request! Se vuoi implementare un nuovo filtro DSP o migliorare l'interfaccia, segui il workflow standard di GitHub e assicurati di documentare i cambiamenti nel file `custom_logger`.
+
+---
+
+## 📄 Licenza
+Il progetto è rilasciato sotto licenza MIT.
+
+---
+
+## 🌟 Credits
+* **pydub**: Manipolazione audio semplificata.
+* **noisereduce**: Algoritmi di denoising allo stato dell'arte.
+* **Rich**: Per la gestione della user experience nel terminale.
+
+---
+
+## 📨 Contatti
+**Sviluppatore**: mattemn97  
+**GitHub Profile**: [https://github.com/mattemn97](https://github.com/mattemn97)
+
+`audio-processing` `dsp` `python` `automation` `mastering` `podcast-tools` `scipy` `pydub` `batch-processing` `noise-reduction` `equalization` `audio-engineering` `cli`
