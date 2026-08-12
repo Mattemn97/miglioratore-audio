@@ -5,43 +5,38 @@ from logging.handlers import RotatingFileHandler
 
 class CustomLogger:
     """
-    Una classe Logger configurata per essere universale.
+    Logger aziendale standardizzato.
     Include formattazione a colori per terminale e salvataggio su file rotativo.
     """
     
-    # Codici colore ANSI per il terminale
+    # Codici colore ANSI per il terminale (Palette pastello/soft dove possibile)
     _COLORS = {
-        'DEBUG': "\033[36m",    # Ciano
-        'INFO': "\033[32m",     # Verde
-        'WARNING': "\033[33m",  # Giallo
-        'ERROR': "\033[31m",    # Rosso
-        'CRITICAL': "\033[41m", # Sfondo Rosso
+        'DEBUG': "\033[38;5;117m",    # Light blue
+        'INFO': "\033[38;5;114m",     # Soft green
+        'WARNING': "\033[38;5;222m",  # Soft yellow/peach
+        'ERROR': "\033[38;5;167m",    # Soft red
+        'CRITICAL': "\033[48;5;167;38;5;231m", # Red background, white text
         'RESET': "\033[0m"      # Reset
     }
 
     @staticmethod
-    def get_logger(name: str = "ProjectLogger", log_file: str = "app.log", level=logging.DEBUG):
+    def get_logger(name: str = "AppLogger", log_file: str = "app.log", level=logging.DEBUG):
         """
-        Ritorna un'istanza di logger configurata.
-        
-        :param name: Nome del modulo che genera il log.
-        :param log_file: Nome del file dove salvare i log.
-        :param level: Livello minimo di logging.
+        Ritorna un'istanza di logger configurata secondo lo standard.
         """
         logger = logging.getLogger(name)
 
-        # Evita di aggiungere handler duplicati se il logger esiste già
         if logger.hasHandlers():
             return logger
 
         logger.setLevel(level)
 
-        # 1. Formattazione per i log
+        # 1. Formattazione per i log su file (nessun colore)
         file_format = logging.Formatter(
             '%(asctime)s | %(name)s | %(levelname)s | %(message)s (%(filename)s:%(lineno)d)'
         )
 
-        # 2. Handler per il Terminale (con colori)
+        # 2. Handler per il Terminale (con colori pastello)
         class ColorFormatter(logging.Formatter):
             def format(self, record):
                 color = CustomLogger._COLORS.get(record.levelname, CustomLogger._COLORS['RESET'])
@@ -54,20 +49,24 @@ class CustomLogger:
         stream_handler.setFormatter(stream_format)
         logger.addHandler(stream_handler)
 
-        # 3. Handler per il File (Rotativo: max 5MB per file, tiene 3 backup)
+        # 3. Handler per il File (Rotativo)
         log_path = Path("logs")
-        log_path.mkdir(exist_ok=True) # Crea la cartella logs se non esiste
-        
-        file_handler = RotatingFileHandler(
-            log_path / log_file, 
-            maxBytes=5*1024*1024, 
-            backupCount=3,
-            encoding='utf-8'
-        )
-        file_handler.setFormatter(file_format)
-        logger.addHandler(file_handler)
+        try:
+            log_path.mkdir(exist_ok=True)
+            
+            file_handler = RotatingFileHandler(
+                log_path / log_file, 
+                maxBytes=5*1024*1024, 
+                backupCount=3,
+                encoding='utf-8'
+            )
+            file_handler.setFormatter(file_format)
+            logger.addHandler(file_handler)
+        except Exception as e:
+            # Fallback se non ci sono i permessi per creare la cartella logs
+            stream_handler.stream.write(f"\\nImpossibile creare la cartella logs: {e}\\n")
 
         return logger
 
-# Singleton preventivo: istanza pre-configurata per uso immediato
+# Singleton per uso immediato
 logger = CustomLogger.get_logger()
